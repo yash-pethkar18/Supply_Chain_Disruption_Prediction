@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #111827;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 480px;
+            border: 1px solid #e5e7eb;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 15px;
+        }
+
+        h2 { color: #1f2937; margin: 0; font-weight: 700; font-size: 22px; }
+        p.sub-text { color: #6b7280; font-size: 13px; margin-top: 5px; }
+
+        .input-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 5px; color: #374151; font-weight: 600; font-size: 13px; }
+        
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #6b7280; font-size: 14px; }
+        
+        input, select {
+            width: 100%;
+            padding: 10px 10px 10px 36px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
+        }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .btn-predict { background-color: #1e3a8a; color: white; }
+        .btn-predict:hover { background-color: #1e40af; }
+        .btn-reset { background-color: #f3f4f6; color: #4b5563; width: 30%; border: 1px solid #d1d5db; }
+
+        .result-box {
+            margin-top: 25px;
+            background-color: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
+        .result-header h3 { margin: 0; font-size: 16px; font-weight: 700; }
+        .danger .result-header h3 { color: #dc2626; }
+        .success .result-header h3 { color: #059669; }
+        
+        /* PLOT IMAGE STYLING */
+        .plot-container {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .plot-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .suggestion-box {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 13px;
+            color: #4b5563;
+            display: flex;
+            gap: 10px;
+            background-color: #f9fafb;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .dashboard-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #1e3a8a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .dashboard-link:hover { text-decoration: underline; }
+
+        .progress-bg {
+            background-color: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress-bar { height: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-section">
+            <h2>Supply Chain Intelligence</h2>
+            <p class="sub-text">AI-Driven Risk Assessment Model</p>
+        </div>
+        
+        <form action="/predict" method="POST">
+            <div class="input-group">
+                <label>Supplier Reliability</label>
+                <div class="input-wrapper"><i class="fas fa-star"></i>
+                    <input type="number" name="rating" min="1" max="5" step="0.1" placeholder="Scale 1.0 - 5.0" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Distance (km)</label>
+                <div class="input-wrapper"><i class="fas fa-route"></i>
+                    <input type="number" name="distance" placeholder="e.g. 1200" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Weather</label>
+                <div class="input-wrapper"><i class="fas fa-cloud"></i>
+                    <select name="weather">
+                        <option value="0">Optimal / Clear</option>
+                        <option value="1">Adverse / Stormy</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Traffic Index</label>
+                <div class="input-wrapper"><i class="fas fa-traffic-light"></i>
+                    <input type="number" name="traffic" min="1" max="10" placeholder="Scale 1-10" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Freight Mode</label>
+                <div class="input-wrapper"><i class="fas fa-truck-loading"></i>
+                    <select name="vehicle">
+                        <option value="0">Last-Mile (Bike)</option>
+                        <option value="1">Standard (Van)</option>
+                        <option value="2">Heavy (Truck)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn-predict">Calculate Risk Profile</button>
+                <button type="button" class="btn-reset" onclick="window.location.href='/'">Reset</button>
+            </div>
+        </form>
+
+        <a href="/dashboard" class="dashboard-link">
+            <i class="fas fa-chart-bar"></i> View Feature Importance Dashboard
+        </a>
+
+        {% if prediction_text %}
+        <div class="result-box {{ prediction_class }}">
+            <div class="result-header">
+                <h3>{{ prediction_text }}</h3>
+                <span style="font-size: 18px; font-weight: 700;">{{ prob }}%</span>
+            </div>
+            
+            <div class="progress-bg">
+                <div class="progress-bar" style="width: {{ prob }}%; background-color: {% if prediction_class == 'danger' %}#dc2626{% else %}#059669{% endif %};"></div>
+            </div>
+
+            <div class="plot-container">
+                <img src="{{ url_for('static', filename='images/prediction_plot.png') }}?v={{ timestamp }}" alt="Risk Analysis Graph">
+            </div>
+
+            <div class="suggestion-box">
+                <i class="fas fa-lightbulb" style="color: #d97706;"></i>
+                <span>{{ suggestion_text }}</span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
